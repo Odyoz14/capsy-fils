@@ -6,12 +6,6 @@ export default function App() {
   const capsuleRefs = useRef([]);
   const [fils, setFils] = useState([]);
 
-  const capsuleData = [
-    { id: 1, top: 230, left: 250 },
-    { id: 2, top: 200, left: 800 },
-    { id: 3, top: 260, left: 1350 }
-  ];
-
   const updateFils = () => {
     const newFils = capsuleRefs.current.map((ref) => {
       if (ref) {
@@ -29,6 +23,33 @@ export default function App() {
   };
 
   useEffect(() => {
+    let animationFrame;
+    const animate = () => {
+      updateFils();
+      animationFrame = requestAnimationFrame(animate);
+    };
+    animate();
+    window.addEventListener("resize", updateFils);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", updateFils);
+    };
+  }, []);
+
+  return (
+    <div>
+      {/* Fils */}
+      <div className="pointer-events-none fixed top-0 left-0 w-full h-full z-0">
+        {fils.map((fil, index) => (
+          <div
+            key={index}
+            className="absolute bg-gray-300"
+            style={{ left: fil.left, height: fil.height, width: "2px", top: 0 }}
+          />
+        ))}
+      </div>
+      
+  useEffect(() => {
     updateFils();
     window.addEventListener("resize", updateFils);
     return () => window.removeEventListener("resize", updateFils);
@@ -40,17 +61,6 @@ export default function App() {
         <h1 className="text-5xl font-bold text-sky-800">Capsy</h1>
         <p className="text-xl text-sky-700 mt-2">Voyagez dans le temps avec vos souvenirs</p>
       </header>
-
-      {/* Fils */}
-      <div className="pointer-events-none fixed top-0 left-0 w-full h-full z-0">
-        {fils.map((fil, index) => (
-          <div
-            key={index}
-            className="absolute bg-gray-300"
-            style={{ left: fil.left, height: fil.height, width: "2px", top: 0 }}
-          />
-        ))}
-      </div>
 
       {/* Capsules */}
       <div className="absolute top-0 left-0 w-full h-full z-10">
@@ -65,6 +75,9 @@ export default function App() {
           />
         ))}
       </div>
+    </div>
+  );
+}
 
       {/* Section visible */}
       <section className="mt-[350px] px-4 max-w-5xl mx-auto text-center">
