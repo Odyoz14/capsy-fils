@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./styles.css";
 
- function App() {
+ export default function App() {
   const capsuleRefs = useRef([]);
   const [fils, setFils] = useState([]);
 
